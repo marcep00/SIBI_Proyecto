@@ -302,6 +302,54 @@ app.post("/rutasrecomendadas", function (req, res) {
   })
 });
 
+app.post("/busquedaplana", function (req, res) {
+    var usuario = req.body.usuario;
+    var dificultad = req.body.dificultad;
+    var epoca = req.body.epoca;
+    var tipo = req.body.tipo;
+    var query = "MATCH (r:Ruta), (p:Persona), (r)-[:DIFICULTAD]->(d), (r)-[:HACER_EN]->(e), (r)-[:TIPO]->(t) "
+                +"WHERE p.usuario = '"+usuario+"' AND d.nombre='"+dificultad+"' AND e.nombre='"+epoca+"' AND t.nombre='"+tipo+"' "
+                +"AND NOT EXISTS((p)-[:HA_REALIZADO {experiencia: 'Mala'}]->(r))"
+                +"RETURN r.nombre, r.distancia, r.tiempo, r.punto_salida, r.desnivel, r.circular, r.imagen";
+
+    const session = driver.session();
+
+    const resultPromise = session.run(query);
+    resultPromise.then(result => {
+        
+        if (result.records.length == 0) {
+            res.json({
+                msg: 'Error'
+            })
+        }
+        else {
+            
+            for(var i=0;i<result.records.length;i++){
+
+                var ruta = {
+                    nombre_ruta: result.records[i]._fields[0],
+                    distancia: result.records[i]._fields[1],
+                    tiempo: result.records[i]._fields[2],
+                    punto_salida: result.records[i]._fields[3],
+                    desnivel: result.records[i]._fields[4],
+                    circular: result.records[i]._fields[5],
+                    imagen: result.records[i]._fields[6],
+                    epoca: epoca,
+                    dificultad: dificultad,
+                    tipo: tipo
+                }
+
+                rutas.push(ruta);
+
+            }
+
+            res.send(rutas)
+        }
+
+        session.close();
+  })
+});
+
 app.listen(3000, function () {
     console.log('Backend listening on port 3000!');
   });
