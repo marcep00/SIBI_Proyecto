@@ -13,7 +13,12 @@
 
           <v-toolbar-title>{{titulo}}</v-toolbar-title>
 
-          <v-spacer></v-spacer>
+          <v-spacer></v-spacer> <!-- https://github.com/marcep00/SIBI_Proyecto -->
+
+          <v-btn href="https://github.com/marcep00/SIBI_Proyecto" target="_blank">
+            Mi github
+            <v-icon>mdi-github</v-icon>
+          </v-btn>
 
         </v-app-bar>
         <br><br><br v-if="!registrar"><br v-if="!registrar"><br v-if="!registrar"><br v-if="!registrar">

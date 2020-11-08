@@ -469,7 +469,7 @@ data: () => ({
           var json = {msg: 'Error'};
 
           if(JSON.stringify(response.data)==JSON.stringify(json)){
-            alert('No hay rutas que mostrar para este usuario')
+            alert('No hay rutas favoritas para este usuario')
           }else{
 
               this.rutas_fav = response.data;
@@ -498,7 +498,7 @@ data: () => ({
             var json = {msg: 'Error'};
 
             if(JSON.stringify(response.data)==JSON.stringify(json)){
-              alert('No hay rutas que mostrar para este usuario')
+              console.log('Ha ocurrido un error')
             }else{
               
               for(var j=0;j<response.data.length;j++){
@@ -533,7 +533,7 @@ data: () => ({
             var json = {msg: 'Error'};
 
             if(JSON.stringify(response.data)==JSON.stringify(json)){
-              alert('No hay rutas que mostrar para este usuario')
+              alert('No hay rutas que mostrar')
             }else{
               
               for(var j=0;j<response.data.length;j++){
@@ -601,9 +601,35 @@ data: () => ({
   },
 
   busqueda_plana: function(dif, ep, tip){
-    //to do
     console.log('busqueda plana')
+    // Make a request
+      axios
+      .post('http://localhost:3000/busquedaplana', {
+          usuario: this.usuarios_rel_def[i],
+          dificultad: this.dificultad,
+          epoca: this.epoca,
+          tipo: this.tipo
+      })
+      .then((response) => {
+          // handle success
+            var json = {msg: 'Error'};
 
+            if(JSON.stringify(response.data)==JSON.stringify(json)){
+              alert('No hay rutas que mostrar')
+            }else{
+              
+              for(var j=0;j<response.data.length;j++){
+
+                //to do
+
+              }
+              
+            }
+      })
+      .catch((error) => {
+          // handle error
+          console.log(error);
+      });
   },
 
   buscar: function(){
