@@ -151,7 +151,12 @@
                       contain
                       >
                       </v-img>
-                      <v-card-title class="pb-1">{{item.nombre_ruta}}</v-card-title>
+                      <v-card-title class="pb-1">
+                        {{item.nombre_ruta}}
+                        <p style="color:green;">
+                          {{item.recomendada}}
+                        </p>
+                      </v-card-title>
 
                       <v-card-actions>
                           <v-btn 
@@ -430,32 +435,75 @@ data: () => ({
       //Se realiza 1ms mas tarde para dar tiempo a que la funcion rellena_rutas_favoritas se ejecute
       setTimeout(() =>{
         if(this.rutas_fav.length >= 3){
-          console.log('dentro')
+          //console.log('dentro')
+          //Primero añadimos las rutas por defecto
+          this.busqueda_plana()
+
+          //Comienza el algoritmo
           //Almacenamos los usuarios a los que les gustan las mismas rutas que a nosotros
           this.usuarios_rel();
-          console.log(this.usuarios_relacionados)
+          //console.log(this.usuarios_relacionados)
           setTimeout(()=>{
             //Ahora nos quedamos solo con los usuarios que aparecen 3 o mas veces
-            console.log('depuramos')
+            //console.log('depuramos')
             this.usuarios_rel_def = [];//limpiamos por si acaso
             this.depurar_usuarios_relacionados();
-            console.log(this.usuarios_rel_def)
+            //console.log(this.usuarios_rel_def)
             //Buscamos las rutas de estos usuarios que coinciden con los parámetros de entrada
-            console.log('buscamos rutas recomendadas')
+            //console.log('buscamos rutas recomendadas')
             this.buscar_rutas_recomendadas();
-            console.log(this.rutas)
+            //console.log(this.rutas)
+            
+            /*//Si no ha coincidido ninguna, se realiza una busqueda normal
+            if(this.rutas.length == 0){
+              console.log('0')
+              this.busqueda_plana();
+            }*/
+
           }, 100)
         }else{
           console.log('1')
-          this.busqueda_plana(this.dificultad, this.epoca, this.tipo)
+          this.busqueda_plana()
         }
       }, 100);
 
-    }else{
+    }else{//Algun dato de entrada esta en aleatorio, hay que generarlo
       console.log('2')
-      this.busqueda_plana(this.dificultad, this.epoca, this.tipo)
+      this.generando_datos_aleatorios()
+      this.busqueda_plana()
     }
     
+  },
+
+  generando_datos_aleatorios: function(){
+
+    var numero;
+
+    if(this.dificultad == 'Aleatorio'){
+
+      //Retorna un entero aleatorio entre min (incluido) y max (excluido)
+      numero = Math.floor(Math.random() * (4 - 1)) + 1;
+      this.dificultad = this.dificultades[numero];
+
+    }
+
+    if(this.epoca == 'Cualquiera'){
+
+      //Retorna un entero aleatorio entre min (incluido) y max (excluido)
+      numero = Math.floor(Math.random() * (6 - 1)) + 1;
+      this.epoca = this.epocas[numero];
+
+    }
+
+    if(this.tipo == 'Cualquiera'){
+
+      //Retorna un entero aleatorio entre min (incluido) y max (excluido)
+      numero = Math.floor(Math.random() * (4 - 1)) + 1;
+      this.tipo = this.tipos[numero];
+
+    }
+
+
   },
 
   rellena_rutas_favoritas: function(){
@@ -469,7 +517,7 @@ data: () => ({
           var json = {msg: 'Error'};
 
           if(JSON.stringify(response.data)==JSON.stringify(json)){
-            alert('No hay rutas favoritas para este usuario')
+            console.log('No hay rutas favoritas para este usuario')
           }else{
 
               this.rutas_fav = response.data;
@@ -537,17 +585,21 @@ data: () => ({
             }else{
               
               for(var j=0;j<response.data.length;j++){
-
                 //console.log(response.data[i])
-                //En la primera ocasión elimino las rutas que pudiera haber, por si acaso
-                if(i == 0){
-                  //this.rutas = [];
-                  this.rutas.push(response.data[j]);
-                }else{
-                  this.rutas.push(response.data[j]);
+                //Comparamos con todas las rutas que ya hay al haber realizado busqueda_plana() antes
+                //y si coincide alguna con la recomendacion personal, se le añade el atributo 'Muy recomendada!'
+                for(var k=0;k<this.rutas.length;k++){
+
+                  if(response.data[j].nombre_ruta == this.rutas[k].nombre_ruta){
+                    this.rutas[k].recomendada = 'Muy recomendada!';
+                    break;
+                  }
+
                 }
+                
 
               }
+              this.mostrarBotonG = true;
               
             }
       })
@@ -600,12 +652,12 @@ data: () => ({
 
   },
 
-  busqueda_plana: function(dif, ep, tip){
+  busqueda_plana: function(){
     console.log('busqueda plana')
     // Make a request
       axios
       .post('http://localhost:3000/busquedaplana', {
-          usuario: this.usuarios_rel_def[i],
+          usuario: this.usuario,
           dificultad: this.dificultad,
           epoca: this.epoca,
           tipo: this.tipo
@@ -618,11 +670,12 @@ data: () => ({
               alert('No hay rutas que mostrar')
             }else{
               
-              for(var j=0;j<response.data.length;j++){
+              //for(var j=0;j<response.data.length;j++){
 
-                //to do
+                this.rutas = response.data;
 
-              }
+              //}
+              this.mostrarBotonG = true;
               
             }
       })
@@ -633,11 +686,13 @@ data: () => ({
   },
 
   buscar: function(){
-     if(this.rutaBuscarNombre.length == 0){
-       this.algoritmo_de_recomendaciones()
-     }else{
-       this.buscar_por_nombre()
-     }
+    this.rutas = [];
+    this.mostrarBotonG = false;
+    if(this.rutaBuscarNombre.length == 0){
+      this.algoritmo_de_recomendaciones()
+    }else{
+      this.buscar_por_nombre()
+    }
   },
 
   cambiarALista: function(){
