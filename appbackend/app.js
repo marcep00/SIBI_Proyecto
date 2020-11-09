@@ -110,7 +110,8 @@ app.post("/buscarnombre", function (req, res) {
                     imagen: result.records[i]._fields[6],
                     epoca: result.records[i]._fields[7],
                     dificultad: result.records[i]._fields[8],
-                    tipo: result.records[i]._fields[9]
+                    tipo: result.records[i]._fields[9],
+                    recomendada: ''
                 }
 
                 rutas.push(ruta);
@@ -130,6 +131,7 @@ app.post("/relacionbuena", function (req, res) {
     var ruta = req.body.ruta;
     var query = "MATCH (p:Persona), (r:Ruta) "
                 +"WHERE p.usuario= '"+usuario+"' AND r.nombre='"+ruta+"' AND NOT EXISTS((p)-[:HA_REALIZADO {experiencia: 'Buena'}]->(r)) "
+                +"AND NOT EXISTS((p)-[:HA_REALIZADO {experiencia: 'Mala'}]->(r)) "
                 +"CREATE (p)-[:HA_REALIZADO {experiencia: 'Buena'}]->(r) "
                 +"RETURN p, r";
 
@@ -157,6 +159,7 @@ app.post("/relacionmala", function (req, res) {
     var ruta = req.body.ruta;
     var query = "MATCH (p:Persona), (r:Ruta) " 
                 +"WHERE p.usuario= '"+usuario+"' AND r.nombre='"+ruta+"' AND NOT EXISTS((p)-[:HA_REALIZADO {experiencia: 'Mala'}]->(r)) "
+                +"AND NOT EXISTS((p)-[:HA_REALIZADO {experiencia: 'Buena'}]->(r)) "
                 +"CREATE (p)-[:HA_REALIZADO {experiencia: 'Mala'}]->(r) "
                 +"RETURN p, r";
 
@@ -209,7 +212,8 @@ app.post("/listarutas", function (req, res) {
                     imagen: result.records[i]._fields[6],
                     epoca: result.records[i]._fields[7],
                     dificultad: result.records[i]._fields[8],
-                    tipo: result.records[i]._fields[9]
+                    tipo: result.records[i]._fields[9],
+                    recomendada: ''
                 }
 
                 rutas.push(ruta);
@@ -288,7 +292,8 @@ app.post("/rutasrecomendadas", function (req, res) {
                     imagen: result.records[i]._fields[6],
                     epoca: epoca,
                     dificultad: dificultad,
-                    tipo: tipo
+                    tipo: tipo,
+                    recomendada: 'Bien'
                 }
 
                 rutas.push(ruta);
@@ -307,6 +312,7 @@ app.post("/busquedaplana", function (req, res) {
     var dificultad = req.body.dificultad;
     var epoca = req.body.epoca;
     var tipo = req.body.tipo;
+    var rutas = [];
     var query = "MATCH (r:Ruta), (p:Persona), (r)-[:DIFICULTAD]->(d), (r)-[:HACER_EN]->(e), (r)-[:TIPO]->(t) "
                 +"WHERE p.usuario = '"+usuario+"' AND d.nombre='"+dificultad+"' AND e.nombre='"+epoca+"' AND t.nombre='"+tipo+"' "
                 +"AND NOT EXISTS((p)-[:HA_REALIZADO {experiencia: 'Mala'}]->(r))"
@@ -336,7 +342,8 @@ app.post("/busquedaplana", function (req, res) {
                     imagen: result.records[i]._fields[6],
                     epoca: epoca,
                     dificultad: dificultad,
-                    tipo: tipo
+                    tipo: tipo,
+                    recomendada: ''
                 }
 
                 rutas.push(ruta);
