@@ -18,7 +18,8 @@ app.post("/registro", function (req, res) {
     var nombre = req.body.nombre;
     var contrasena = req.body.contrasena;
     var anonacimiento = req.body.anonacimiento;
-    var query = "CREATE (n:Persona{nombre:'" + nombre + "', nacimiento:" + anonacimiento + ", usuario:'" + usuario + "', password:'" + contrasena + "'})";
+    var query = "CREATE (n:Persona{nombre:'" + nombre + "', nacimiento:" + anonacimiento + ", "
+    +"usuario:'" + usuario + "', password:'" + contrasena + "'})";
 
     const session = driver.session();
 
@@ -65,24 +66,19 @@ app.post("/login", function (req, res) {
 
         session.close();
   })
+  .catch((error) => {
+      // handle error
+      res.json({
+          msg: 'Error'
+      });
+      console.log(error)
+      session.close();
+  })
 });
 
 app.post("/buscarnombre", function (req, res) {
     var nombre = req.body.nombre;
     var rutas = [];
-    /*var ruta =
-    {
-        nombre_ruta: '',
-        distancia: '',
-        tiempo: '',
-        punto_salida: '',
-        desnivel: '',
-        circular: '',
-        imagen: '',
-        epoca: '',
-        dificultad: '',
-        tipo: ''
-    };*/
     var query = "MATCH (r:Ruta)-[:HACER_EN]->(e), (r)-[:DIFICULTAD]->(d), (r)-[:TIPO]->(t) "
                 +"WHERE TOLOWER(r.nombre)=~TOLOWER('.*"+nombre+".*') "
                 +"RETURN r.nombre, r.distancia, r.tiempo, r.punto_salida, r.desnivel, r.circular, r.imagen, e.nombre, d.nombre, t.nombre";
@@ -124,6 +120,14 @@ app.post("/buscarnombre", function (req, res) {
 
         session.close();
   })
+  .catch((error) => {
+      // handle error
+      res.json({
+          msg: 'Error'
+      });
+      console.log(error)
+      session.close();
+  })
 });
 
 app.post("/relacionbuena", function (req, res) {
@@ -152,6 +156,14 @@ app.post("/relacionbuena", function (req, res) {
 
         session.close();
   })
+  .catch((error) => {
+      // handle error
+      res.json({
+          msg: 'Error'
+      });
+      console.log(error)
+      session.close();
+  })
 });
 
 app.post("/relacionmala", function (req, res) {
@@ -179,6 +191,14 @@ app.post("/relacionmala", function (req, res) {
         }
 
         session.close();
+  })
+  .catch((error) => {
+      // handle error
+      res.json({
+          msg: 'Error'
+      });
+      console.log(error)
+      session.close();
   })
 });
 
@@ -226,6 +246,14 @@ app.post("/listarutas", function (req, res) {
 
         session.close();
   })
+  .catch((error) => {
+      // handle error
+      res.json({
+          msg: 'Error'
+      });
+      console.log(error)
+      session.close();
+  })
 });
 
 app.post("/usuariosrelacionados", function (req, res) {
@@ -255,6 +283,14 @@ app.post("/usuariosrelacionados", function (req, res) {
         }
 
         session.close();
+  })
+  .catch((error) => {
+      // handle error
+      res.json({
+          msg: 'Error'
+      });
+      console.log(error)
+      session.close();
   })
 });
 
@@ -305,6 +341,14 @@ app.post("/rutasrecomendadas", function (req, res) {
 
         session.close();
   })
+  .catch((error) => {
+      // handle error
+      res.json({
+          msg: 'Error'
+      });
+      console.log(error)
+      session.close();
+  })
 });
 
 app.post("/busquedaplana", function (req, res) {
@@ -354,6 +398,14 @@ app.post("/busquedaplana", function (req, res) {
         }
 
         session.close();
+  })
+  .catch((error) => {
+      // handle error
+      res.json({
+          msg: 'Error'
+      });
+      console.log(error)
+      session.close();
   })
 });
 
