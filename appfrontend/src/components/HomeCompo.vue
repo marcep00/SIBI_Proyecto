@@ -453,22 +453,16 @@ data: () => ({
             //console.log('buscamos rutas recomendadas')
             this.buscar_rutas_recomendadas();
             //console.log(this.rutas)
-            
-            /*//Si no ha coincidido ninguna, se realiza una busqueda normal
-            if(this.rutas.length == 0){
-              console.log('0')
-              this.busqueda_plana();
-            }*/
 
           }, 100)
         }else{
-          console.log('1')
+          //console.log('1')
           this.busqueda_plana()
         }
       }, 100);
 
     }else{//Algun dato de entrada esta en aleatorio, hay que generarlo
-      console.log('2')
+      //console.log('2')
       this.generando_datos_aleatorios()
       this.busqueda_plana()
     }
@@ -517,7 +511,7 @@ data: () => ({
           var json = {msg: 'Error'};
 
           if(JSON.stringify(response.data)==JSON.stringify(json)){
-            console.log('No hay rutas favoritas para este usuario')
+            console.log('No tienes rutas favoritas para este usuario')
           }else{
 
               this.rutas_fav = response.data;
@@ -566,7 +560,6 @@ data: () => ({
   },
 
   buscar_rutas_recomendadas: function(){
-    console.log('usamos -> '+this.usuarios_rel_def[0])
     for(var i=0;i<this.usuarios_rel_def.length;i++){
       // Make a request
       axios
@@ -581,11 +574,10 @@ data: () => ({
             var json = {msg: 'Error'};
 
             if(JSON.stringify(response.data)==JSON.stringify(json)){
-              alert('No hay rutas que mostrar')
+              console.log('No hay rutas que mostrar teniendo en cuenta usuarios relacionados')
             }else{
               
               for(var j=0;j<response.data.length;j++){
-                //console.log(response.data[i])
                 //Comparamos con todas las rutas que ya hay al haber realizado busqueda_plana() antes
                 //y si coincide alguna con la recomendacion personal, se le añade el atributo 'Muy recomendada!'
                 for(var k=0;k<this.rutas.length;k++){
@@ -594,13 +586,10 @@ data: () => ({
                     this.rutas[k].recomendada = 'Muy recomendada!';
                     break;
                   }
-
                 }
-                
-
               }
               this.mostrarBotonG = true;
-              
+
             }
       })
       .catch((error) => {
@@ -688,10 +677,14 @@ data: () => ({
   buscar: function(){
     this.rutas = [];
     this.mostrarBotonG = false;
-    if(this.rutaBuscarNombre.length == 0){
-      this.algoritmo_de_recomendaciones()
+    if((this.rutaBuscarNombre != null)){
+      if((this.rutaBuscarNombre.length == 0)){
+        this.algoritmo_de_recomendaciones();
+      }else{
+        this.buscar_por_nombre();
+      }
     }else{
-      this.buscar_por_nombre()
+      this.algoritmo_de_recomendaciones();
     }
   },
 
