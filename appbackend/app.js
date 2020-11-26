@@ -3,7 +3,7 @@ var app = express();
 var bodyParser = require('body-parser')
 var cors = require('cors')
 const neo4j = require('neo4j-driver')
-const driver = neo4j.driver("bolt://localhost", neo4j.auth.basic("neo4j", "12345"))
+const driver = neo4j.driver("bolt://localhost", neo4j.auth.basic("neo4j", "marcep00"))
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
