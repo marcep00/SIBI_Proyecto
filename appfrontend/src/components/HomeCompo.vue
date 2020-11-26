@@ -151,11 +151,12 @@
                       contain
                       >
                       </v-img>
-                      <v-card-title class="pb-1">
+                      <v-card-title class="pb-1 text--primary">
                         {{item.nombre_ruta}}
-                        <p style="color:green;">
+                        <v-spacer></v-spacer>
+                        <div style="color:green;">
                           {{item.recomendada}}
-                        </p>
+                        </div>
                       </v-card-title>
 
                       <v-card-actions>
@@ -441,8 +442,9 @@ data: () => ({
 
           //Comienza el algoritmo
           //Almacenamos los usuarios a los que les gustan las mismas rutas que a nosotros
+          //Limpiamos el array
+          this.usuarios_relacionados = [];
           this.usuarios_rel();
-          //console.log(this.usuarios_relacionados)
           setTimeout(()=>{
             //Ahora nos quedamos solo con los usuarios que aparecen 3 o mas veces
             //console.log('depuramos')
@@ -452,7 +454,11 @@ data: () => ({
             //Buscamos las rutas de estos usuarios que coinciden con los parámetros de entrada
             //console.log('buscamos rutas recomendadas')
             this.buscar_rutas_recomendadas();
-            //console.log(this.rutas)
+            //Movemos las rutas mas recomendadas hacia delante
+            setTimeout(() =>{
+              this.reordenarRutas();
+            },50)
+            
 
           }, 100)
         }else{
@@ -610,7 +616,7 @@ data: () => ({
             aux++;
         }
 
-        if(aux >= 3){//OJO CAMBIAR POR 3
+        if(aux >= 3){
 
             var yahay = false;
             if(this.usuarios_rel_def.length > 0){
@@ -638,6 +644,23 @@ data: () => ({
     //Eliminamos al propio usuario de la lista, al usuario actual
     var x = this.usuarios_rel_def.indexOf( this.usuario );
     this.usuarios_rel_def.splice( x, 1 );
+
+  },
+
+  reordenarRutas: function(){
+
+    for(var c=0;c<this.rutas.length;c++){
+
+      if(this.rutas[c].recomendada == 'Muy recomendada!'){
+
+        //Lo copiamos alante del todo
+        this.rutas.splice(0, 0, this.rutas[c]);
+        //Lo eliminamos atras
+        this.rutas.splice((c+1),1);
+
+      }
+
+    }
 
   },
 

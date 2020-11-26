@@ -13,8 +13,8 @@
           <v-spacer></v-spacer>
 
           <v-btn @click="atras()">
-            Atrás
             <v-icon>mdi-arrow-left-circle</v-icon>
+            Atrás
           </v-btn>
 
         </v-app-bar>
