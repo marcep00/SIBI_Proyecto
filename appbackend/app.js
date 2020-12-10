@@ -259,7 +259,7 @@ app.post("/listarutas", function (req, res) {
 app.post("/usuariosrelacionados", function (req, res) {
     var ruta = req.body.ruta;
     var usuarios = [];
-    var query = "MATCH (p:Persona), (p)-[:HA_REALIZADO]->(r) "+
+    var query = "MATCH (p:Persona), (p)-[:HA_REALIZADO {experiencia: 'Buena'}]->(r) "+
                 "WHERE r.nombre='"+ruta+"' "+
                 "RETURN p.usuario";
 
