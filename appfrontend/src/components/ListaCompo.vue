@@ -10,6 +10,16 @@
 
           <v-toolbar-title>{{titulo}}</v-toolbar-title>
 
+          <v-avatar
+            size="70"
+            class="mr-4"
+          >
+            <v-img
+              src="../assets/logo.png"
+              contain
+            ></v-img>
+          </v-avatar>
+
           <v-spacer></v-spacer>
 
           <v-btn @click="atras()">

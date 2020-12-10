@@ -12,6 +12,16 @@
           <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
           <v-toolbar-title>{{titulo}}</v-toolbar-title>
+          
+          <v-avatar
+            size="70"
+            class="mr-4"
+          >
+            <v-img
+              src="../assets/logo.png"
+              contain
+            ></v-img>
+          </v-avatar>
 
           <v-spacer></v-spacer> <!-- https://github.com/marcep00/SIBI_Proyecto -->
 

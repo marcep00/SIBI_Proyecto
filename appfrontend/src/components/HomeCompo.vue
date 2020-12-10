@@ -9,9 +9,19 @@
           dense
           dark
         >
-          <v-app-bar-nav-icon></v-app-bar-nav-icon>
+          <v-app-bar-nav-icon @click.stop="menu_ayuda = !menu_ayuda"></v-app-bar-nav-icon>
 
           <v-toolbar-title>{{titulo}}</v-toolbar-title>
+          
+          <v-avatar
+            size="70"
+            class="mr-4"
+          >
+            <v-img
+              src="../assets/logo.png"
+              contain
+            ></v-img>
+          </v-avatar>
 
           <v-spacer></v-spacer>
 
@@ -25,7 +35,34 @@
             <v-icon>mdi-login-variant</v-icon>
           </v-btn>
 
+          <v-navigation-drawer
+            v-model="menu_ayuda"
+            absolute
+            temporary
+            height = "1000px"
+          >
+            <br>
+            <h3>¡Bienvenido!</h3>
+            <br>
+            <v-list
+              nav
+              dense
+            >
+              <v-list-item-group
+                v-model="group"
+              >
+                <v-list-item>
+                  <v-list-item-title @click="overlay = !overlay">Ayuda</v-list-item-title>
+                </v-list-item> 
+
+              </v-list-item-group>
+            </v-list>
+            
+          </v-navigation-drawer>
+
         </v-app-bar>
+
+        
         
         <!-- <div>
             <v-carousel
@@ -271,6 +308,55 @@
         </v-card>
       </v-dialog>
 
+      <v-overlay
+          :z-index="zIndex"
+          :value="overlay"
+        >
+          <v-card
+            class="mx-auto"
+            outlined
+            color = "white"
+          >
+
+            <v-card-text>
+              <p class="display-1 text--primary">
+                Sección de ayuda
+              </p>
+              <div class="text--primary">
+                Bienvenido a la aplicación, aquí podrás encontrar tu próxima aventura.<br><br>
+                Es muy fácil, te enseñaré cómo. Primero ten en cuenta tu experiencia a la hora de realizar<br>
+                una ruta, deberás elegir entre una dificultad alta, media o baja. Si eres todo un experto y te<br>
+                gustan las aventuras con adrenalina, escoge alta, si de vez en cuando haces alguna ruta y<br>
+                te sientes con ganas, escoge media, y si lo que quieres es dar un paseo por la naturaleza,<br>
+                decántate por una dificultad baja.<br>
+                <br>
+                Después tendrás la opción de escoger recomendaciones para ciertas épocas del año<br>
+                (primavera, verano u otoño), por ejemplo, una ruta se recomienda hacer en otoño ya que el<br>
+                paisaje es mucho más bonito que en verano, etc. Además, cuentas con la opción de rutas<br>
+                que se pueden hacer en cualquier época, o incluso hay una opción para aquellas que no se<br>
+                recomiendan hacer con nieve, por si el día que escogiste ha nevado pero no quieres dejar<br>
+                de salir a pasear.<br>
+                <br>
+                Por último tendrás la opción de elegir entre recorrer el trayecto andando, en bici, o si no te<br>
+                importa, hay rutas que se podrán hacer de ambas formas.<br>
+                <br>
+                No pierdas más tiempo, y ¡empieza ya!
+                <br>
+
+              </div>
+            </v-card-text>
+            
+            <v-card-actions>
+              <v-btn
+                @click="overlay = false"
+                color="green"
+              >
+                Ok!
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-overlay>
+      <br>
     </div>
 
   </v-container>
@@ -307,6 +393,10 @@ data: () => ({
   rutaBuscarNombre: '',
   show: false,
   mostrarBotonG: false,
+  menu_ayuda: false,
+  group: false,
+  overlay: false,
+  zIndex: 0,
   titulo: 'Encuentra tu próxima aventura',
   dificultades: ['Aleatorio', 'Baja', 'Media', 'Alta'],
   dificultad: 'Aleatorio',
@@ -426,7 +516,7 @@ data: () => ({
   },
 
   algoritmo_de_recomendaciones: function(){
-    console.log(this.usuario)
+    //console.log(this.usuario)
     if( (this.dificultad != 'Aleatorio') && (this.epoca != 'Cualquiera') && (this.tipo != 'Cualquiera') ){
       
    
@@ -449,15 +539,18 @@ data: () => ({
             //Ahora nos quedamos solo con los usuarios que aparecen 3 o mas veces
             //console.log('depuramos')
             this.usuarios_rel_def = [];//limpiamos por si acaso
+            //console.log(this.usuarios_relacionados);
             this.depurar_usuarios_relacionados();
-            //console.log(this.usuarios_rel_def)
+            //console.log('depurao '+this.usuarios_rel_def)
             //Buscamos las rutas de estos usuarios que coinciden con los parámetros de entrada
             //console.log('buscamos rutas recomendadas')
+            setTimeout(()=>{
             this.buscar_rutas_recomendadas();
+            },100)
             //Movemos las rutas mas recomendadas hacia delante
             setTimeout(() =>{
               this.reordenarRutas();
-            },50)
+            },150)
             
 
           }, 100)
@@ -503,7 +596,6 @@ data: () => ({
 
     }
 
-
   },
 
   rellena_rutas_favoritas: function(){
@@ -522,7 +614,7 @@ data: () => ({
 
               this.rutas_fav = response.data;
 
-              console.log(this.rutas_fav)
+              //console.log(this.rutas_fav)
 
           }
     })
@@ -665,7 +757,7 @@ data: () => ({
   },
 
   busqueda_plana: function(){
-    console.log('busqueda plana')
+    //console.log('busqueda plana')
     // Make a request
       axios
       .post('http://localhost:3000/busquedaplana', {
