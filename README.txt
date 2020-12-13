@@ -1,4 +1,4 @@
-En este proyecto podemos encontrar los siguientes componentes.
+En este proyecto podemos encontrar los siguientes componentes:
 
 - Las carpetas appbackend y appfrontend componen en gran parte la aplicación.
 - El documento PDF "Base de datos" contiene el código para crear la base de datos en Neo4j.
