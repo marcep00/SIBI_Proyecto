@@ -9,4 +9,4 @@ En este proyecto podemos encontrar los siguientes componentes.
 
 Para acabar, adjunto el enlace al cuaderno OSF, donde se puede ver la investigación que he hecho para llevar a cabo este trabajo.
 
-https://osf.io/m28t3/?view_only=d061dde618694545baa73840f21332fc
+https://osf.io/m28t3/?view_only=586cbb8c25df409da2c21fd0cbb3611d
